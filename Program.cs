@@ -124,7 +124,6 @@ string[] words = task2.parameters.Split(",");
 string[] uniqueWords = words.Distinct().ToArray();
 Array.Sort(uniqueWords);
 string answer2 = string.Join(",", uniqueWords);
-Console.WriteLine(answer2);
 
 // Send the answer to the server
 Response task2AnswerResponse = await httpUtils.Post(baseURL + taskEndpoint + myPersonalID + "/" + taskID, answer2);
@@ -133,9 +132,22 @@ Console.WriteLine($"Answer: {Colors.Green}{task2AnswerResponse}{ANSICodes.Reset}
 //#### THIRD TASK 
 // Fetch the details of the task from the server.
 taskID = "psu31_4";
-Response task2Response = await httpUtils.Get(baseURL + taskEndpoint + myPersonalID + "/" + taskID); // Get the task from the server
-Task task2 = JsonSerializer.Deserialize<Task>(task2Response.content);
-Console.WriteLine($"TASK: {ANSICodes.Effects.Bold}{task2?.title}{ANSICodes.Reset}\n{task2?.description}\nParameters: {Colors.Yellow}{task2?.parameters}{ANSICodes.Reset}");
+Response task3Response = await httpUtils.Get(baseURL + taskEndpoint + myPersonalID + "/" + taskID); // Get the task from the server
+Task task3 = JsonSerializer.Deserialize<Task>(task3Response.content);
+Console.WriteLine($"TASK: {ANSICodes.Effects.Bold}{task3?.title}{ANSICodes.Reset}\n{task3?.description}\nParameters: {Colors.Yellow}{task3?.parameters}{ANSICodes.Reset}");
+
+//Solution to the third task
+string[] numbers = task3.parameters.Split(",");
+int[] intNumbers = new int[numbers.Length];
+for (int i = 0; i < numbers.Length; i++)
+{
+    intNumbers[i] = int.Parse(numbers[i]);
+}
+int answer3 = intNumbers.Sum();
+
+// Send the answer to the server
+Response task3AnswerResponse = await httpUtils.Post(baseURL + taskEndpoint + myPersonalID + "/" + taskID, answer3.ToString());
+Console.WriteLine($"Answer: {Colors.Green}{task3AnswerResponse}{ANSICodes.Reset}");
 
 
 
