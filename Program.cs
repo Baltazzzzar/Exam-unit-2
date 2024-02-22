@@ -149,6 +149,38 @@ int answer3 = intNumbers.Sum();
 Response task3AnswerResponse = await httpUtils.Post(baseURL + taskEndpoint + myPersonalID + "/" + taskID, answer3.ToString());
 Console.WriteLine($"Answer: {Colors.Green}{task3AnswerResponse}{ANSICodes.Reset}");
 
+//#### FOURTH TASK
+// Fetch the details of the task from the server.
+taskID = "kuTw53L";
+Response task4Response = await httpUtils.Get(baseURL + taskEndpoint + myPersonalID + "/" + taskID); // Get the task from the server
+Task task4 = JsonSerializer.Deserialize<Task>(task4Response.content);
+Console.WriteLine($"TASK: {ANSICodes.Effects.Bold}{task4?.title}{ANSICodes.Reset}\n{task4?.description}\nParameters: {Colors.Yellow}{task4?.parameters}{ANSICodes.Reset}");
+
+
+//Solution to the fourth task
+string[] numbersPrime = task4.parameters.Split(",");
+int[] intNumbersPrime = new int[numbersPrime.Length];
+for (int i = 0; i < numbersPrime.Length; i++)
+{
+    intNumbersPrime[i] = int.Parse(numbersPrime[i]);
+}
+bool IsNumberPrime(int number)
+{
+    if (number <= 1)
+    {
+        return false;
+    }
+    for (int i = 2; i < number; i++)
+    {
+        if (number % i == 0)
+        {
+            return false;
+        }
+    }
+    return true;
+}
+
+
 
 
 //###Testing
@@ -168,7 +200,12 @@ static void Test<T>(T expected, T actual, string description = "Test")
 Test(RomanToInteger("IV"), 4, " IV ");
 Test(RomanToInteger("XLIX"), 49, "XLIX");
 Test(RomanToInteger("XCIX"), 99, "XCIX");
-
+Test(IsNumberPrime(2), true, "2 is prime");
+Test(IsNumberPrime(4), false, "4 is not prime");
+Test(IsNumberPrime(5), true, "5 is prime");
+Test(IsNumberPrime(7), true, "7 is prime");
+Test(IsNumberPrime(9), false, "9 is not prime");
+Test(IsNumberPrime(11), true, "11 is prime");
 
 
 
