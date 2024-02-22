@@ -34,31 +34,47 @@ int RomanToInteger(string input)
     int result = 0;
     for (int i = 0; i < input.Length; i++)
     {
-        if (input.Length - i > 1)
+        if (input.Length - i >= 2)
         {
             if (input[i] == 'X' && input[i + 1] == 'C')
             {
                 result += 90;
-                i++;
                 i++;
             }
             else if (input[i] == 'X' && input[i + 1] == 'L')
             {
                 result += 40;
                 i++;
-                i++;
             }
             else if (input[i] == 'I' && input[i + 1] == 'V')
             {
                 result += 4;
-                i++;
                 i++;
             }
             else if (input[i] == 'I' && input[i + 1] == 'X')
             {
                 result += 9;
                 i++;
-                i++;
+            }
+            else if (input[i] == 'C')
+            {
+                result += 100;
+            }
+            else if (input[i] == 'L')
+            {
+                result += 50;
+            }
+            else if (input[i] == 'X')
+            {
+                result += 10;
+            }
+            else if (input[i] == 'V')
+            {
+                result += 5;
+            }
+            else if (input[i] == 'I')
+            {
+                result += 1;
             }
         }
         else
@@ -66,27 +82,22 @@ int RomanToInteger(string input)
             if (input[i] == 'C')
             {
                 result += 100;
-                i++;
             }
             else if (input[i] == 'L')
             {
                 result += 50;
-                i++;
             }
             else if (input[i] == 'X')
             {
                 result += 10;
-                i++;
             }
             else if (input[i] == 'V')
             {
                 result += 5;
-                i++;
             }
             else if (input[i] == 'I')
             {
                 result += 1;
-                i++;
             }
         }
     }
@@ -113,10 +124,17 @@ static void Test<T>(T expected, T actual, string description = "Test")
 //Testing the tasks
 Test(RomanToInteger("III"), 3, "III");
 Test(RomanToInteger("IV"), 4, "IV");
+Test(RomanToInteger("VIII"), 8, "VIII");
 Test(RomanToInteger("IX"), 9, "IX");
+Test(RomanToInteger("XL"), 40, "XL");
+Test(RomanToInteger("XLVIII"), 48, "XLVIII");
+Test(RomanToInteger("XLIV"), 44, "XLIV");
+Test(RomanToInteger("XLIX"), 49, "XLIX");
 Test(RomanToInteger("LVIII"), 58, "LVIII");
-Test(RomanToInteger("XLVII"), 48, "XLVII");
-Test(RomanToInteger("XCVII"), 98, "XCVII");
+Test(RomanToInteger("XC"), 90, "XC");
+Test(RomanToInteger("XCIV"), 94, "XCIV");
+Test(RomanToInteger("XCVIII"), 98, "XCVIII");
+Test(RomanToInteger("XCIX"), 99, "XCIX");
 
 
 
