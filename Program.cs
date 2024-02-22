@@ -7,7 +7,7 @@ Console.Clear();
 Console.WriteLine("Starting Assignment 2");
 
 // SETUP 
-const string myPersonalID = ""; // GET YOUR PERSONAL ID FROM THE ASSIGNMENT PAGE https://mm-203-module-2-server.onrender.com/
+const string myPersonalID = "c40b8fc46fb28dc1a89da405e192fc8b543f709d8b19c13bd6e2ece5d777cb7b"; // GET YOUR PERSONAL ID FROM THE ASSIGNMENT PAGE https://mm-203-module-2-server.onrender.com/
 const string baseURL = "https://mm-203-module-2-server.onrender.com/";
 const string startEndpoint = "start/"; // baseURl + startEndpoint + myPersonalID
 const string taskEndpoint = "task/";   // baseURl + taskEndpoint + myPersonalID + "/" + taskID
@@ -19,18 +19,114 @@ HttpUtils httpUtils = HttpUtils.instance;
 // We start by registering and getting the first task
 Response startRespons = await httpUtils.Get(baseURL + startEndpoint + myPersonalID);
 Console.WriteLine($"Start:\n{Colors.Magenta}{startRespons}{ANSICodes.Reset}\n\n"); // Print the response from the server to the console
-string taskID = ""; // We get the taskID from the previous response and use it to get the task (look at the console output to find the taskID)
+string taskID = "rEu25ZX"; // We get the taskID from the previous response and use it to get the task (look at the console output to find the taskID)
 
 //#### FIRST TASK 
 // Fetch the details of the task from the server.
 Response task1Response = await httpUtils.Get(baseURL + taskEndpoint + myPersonalID + "/" + taskID); // Get the task from the server
-Console.WriteLine(task1Response);
+Task task1 = JsonSerializer.Deserialize<Task>(task1Response.content);
+Console.WriteLine($"TASK: {ANSICodes.Effects.Bold}{task1?.title}{ANSICodes.Reset}\n{task1?.description}\nParameters: {Colors.Yellow}{task1?.parameters}{ANSICodes.Reset}");
+
+//Solution to the first task
+string romanNumeral = task1.parameters.Split(" ")[0];
+int RomanToInteger(string input)
+{
+    int result = 0;
+    for (int i = 0; i < input.Length; i++)
+    {
+        if (input.Length - i > 1)
+        {
+            if (input[i] == 'X' && input[i + 1] == 'C')
+            {
+                result += 90;
+                i++;
+                i++;
+            }
+            else if (input[i] == 'X' && input[i + 1] == 'L')
+            {
+                result += 40;
+                i++;
+                i++;
+            }
+            else if (input[i] == 'I' && input[i + 1] == 'V')
+            {
+                result += 4;
+                i++;
+                i++;
+            }
+            else if (input[i] == 'I' && input[i + 1] == 'X')
+            {
+                result += 9;
+                i++;
+                i++;
+            }
+        }
+        else
+        {
+            if (input[i] == 'C')
+            {
+                result += 100;
+                i++;
+            }
+            else if (input[i] == 'L')
+            {
+                result += 50;
+                i++;
+            }
+            else if (input[i] == 'X')
+            {
+                result += 10;
+                i++;
+            }
+            else if (input[i] == 'V')
+            {
+                result += 5;
+                i++;
+            }
+            else if (input[i] == 'I')
+            {
+                result += 1;
+                i++;
+            }
+        }
+    }
+    return result;
+}
 
 
 
 
 
+//###Testing
+//Testing function
+static void Test<T>(T expected, T actual, string description = "Test")
+{
+    if (expected.Equals(actual))
+    {
+        Console.WriteLine($"{description} ++PASSED++. Expected: {expected}, Actual: {actual}");
+    }
+    else
+    {
+        Console.WriteLine($"{description} --FAILED--. Expected: {expected}, Actual: {actual}");
+    }
+}
+//Testing the tasks
+Test(RomanToInteger("III"), 3, "III");
+Test(RomanToInteger("IV"), 4, "IV");
+Test(RomanToInteger("IX"), 9, "IX");
+Test(RomanToInteger("LVIII"), 58, "LVIII");
+Test(RomanToInteger("XLVII"), 48, "XLVII");
+Test(RomanToInteger("XCVII"), 98, "XCVII");
 
-//ID: c40b8fc46fb28dc1a89da405e192fc8b543f709d8b19c13bd6e2ece5d777cb7b
-// start/c40b8fc46fb28dc1a89da405e192fc8b543f709d8b19c13bd6e2ece5d777cb7b
-// {"taskID":"rEu25ZX"}
+
+
+
+
+class Task
+{
+    public string? title { get; set; }
+    public string? description { get; set; }
+    public string? taskID { get; set; }
+    public string? usierID { get; set; }
+    public string? parameters { get; set; }
+}
