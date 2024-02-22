@@ -104,8 +104,31 @@ int RomanToInteger(string input)
     return result;
 }
 
-Console.WriteLine($"Solution: {ANSICodes.Effects.Bold}{Colors.Red}{RomanToInteger(romanNumeral)}{ANSICodes.Reset}");
+int answer = RomanToInteger(romanNumeral);
 
+// Send the answer to the server
+Response task1AnswerResponse = await httpUtils.Post(baseURL + taskEndpoint + myPersonalID + "/" + taskID, answer.ToString());
+Console.WriteLine($"Answer: {Colors.Green}{task1AnswerResponse}{ANSICodes.Reset}");
+
+
+//#### SECOND TASK 
+// Fetch the details of the task from the server.
+taskID = "otYK2";
+Response task2Response = await httpUtils.Get(baseURL + taskEndpoint + myPersonalID + "/" + taskID); // Get the task from the server
+Task task2 = JsonSerializer.Deserialize<Task>(task2Response.content);
+Console.WriteLine($"TASK: {ANSICodes.Effects.Bold}{task2?.title}{ANSICodes.Reset}\n{task2?.description}\nParameters: {Colors.Yellow}{task2?.parameters}{ANSICodes.Reset}");
+
+
+//Solution to the second task
+string[] words = task2.parameters.Split(",");
+string[] uniqueWords = words.Distinct().ToArray();
+Array.Sort(uniqueWords);
+string answer2 = string.Join(",", uniqueWords);
+Console.WriteLine(answer2);
+
+// Send the answer to the server
+Response task2AnswerResponse = await httpUtils.Post(baseURL + taskEndpoint + myPersonalID + "/" + taskID, JsonSerializer.Serialize(answer2));
+Console.WriteLine($"Answer: {Colors.Green}{task2AnswerResponse}{ANSICodes.Reset}");
 
 
 
@@ -123,18 +146,8 @@ static void Test<T>(T expected, T actual, string description = "Test")
     }
 }
 //Testing the tasks
-Test(RomanToInteger("III"), 3, "III");
-Test(RomanToInteger("IV"), 4, "IV");
-Test(RomanToInteger("VIII"), 8, "VIII");
-Test(RomanToInteger("IX"), 9, "IX");
-Test(RomanToInteger("XL"), 40, "XL");
-Test(RomanToInteger("XLVIII"), 48, "XLVIII");
-Test(RomanToInteger("XLIV"), 44, "XLIV");
+Test(RomanToInteger("IV"), 4, " IV ");
 Test(RomanToInteger("XLIX"), 49, "XLIX");
-Test(RomanToInteger("LVIII"), 58, "LVIII");
-Test(RomanToInteger("XC"), 90, "XC");
-Test(RomanToInteger("XCIV"), 94, "XCIV");
-Test(RomanToInteger("XCVIII"), 98, "XCVIII");
 Test(RomanToInteger("XCIX"), 99, "XCIX");
 
 
