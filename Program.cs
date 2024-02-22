@@ -104,6 +104,7 @@ int RomanToInteger(string input)
     return result;
 }
 
+Console.WriteLine($"Solution: {ANSICodes.Effects.Bold}{Colors.Red}{RomanToInteger(romanNumeral)}{ANSICodes.Reset}");
 
 
 
