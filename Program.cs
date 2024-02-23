@@ -5,25 +5,24 @@ using Colors = AnsiTools.ANSICodes.Colors;
 using System.Runtime.CompilerServices;
 using System.Diagnostics.CodeAnalysis;
 
+HttpUtils httpUtils = HttpUtils.instance;
+
 Console.Clear();
 Console.WriteLine("Starting Assignment 2");
 
-HttpUtils httpUtils = HttpUtils.instance;
-
 //#### REGISTRATION
 Response startRespons = await httpUtils.Get(Constants.baseURL + Constants.startEndpoint + Constants.myPersonalID);
-Console.WriteLine($"Start:\n{Colors.Magenta}{startRespons}{ANSICodes.Reset}\n\n"); // Print the response from the server to the console
-string taskID = ""; // We get the taskID from the previous response and use it to get the task (look at the console output to find the taskID)
+Console.WriteLine($"Start:\n{Colors.Magenta}{startRespons}{ANSICodes.Reset}\n\n");
 
 
 
 //#### FIRST TASK 
 // Gathering the task
-taskID = "rEu25ZX";
+string taskID = "rEu25ZX";
 Response task1Response = await httpUtils.Get(Constants.baseURL + Constants.taskEndpoint + Constants.myPersonalID + "/" + taskID);
 Task task1 = Functions.GetTask(task1Response);
 
-//Solution
+// Solution
 int answerTaskOne = TaskSolver.SolveTaskOne(task1.parameters);
 
 // Sending the answer to the server
@@ -38,7 +37,7 @@ taskID = "otYK2";
 Response task2Response = await httpUtils.Get(Constants.baseURL + Constants.taskEndpoint + Constants.myPersonalID + "/" + taskID);
 Task task2 = Functions.GetTask(task2Response);
 
-//Solution
+// Solution
 string answerTaskTwo = TaskSolver.SolveTaskTwo(task2.parameters);
 
 // Sending the answer to the server
@@ -53,7 +52,7 @@ taskID = "psu31_4";
 Response task3Response = await httpUtils.Get(Constants.baseURL + Constants.taskEndpoint + Constants.myPersonalID + "/" + taskID);
 Task task3 = Functions.GetTask(task3Response);
 
-//Solution
+// Solution
 int answerTaskThree = TaskSolver.SolveTaskThree(task3.parameters);
 
 // Sending the answer to the server
@@ -68,7 +67,7 @@ taskID = "kuTw53L";
 Response task4Response = await httpUtils.Get(Constants.baseURL + Constants.taskEndpoint + Constants.myPersonalID + "/" + taskID);
 Task task4 = Functions.GetTask(task4Response);
 
-//Solution
+// Solution
 string answerTaskFour = TaskSolver.SolveTaskFour(task4.parameters);
 
 // Sending the answer to the server
