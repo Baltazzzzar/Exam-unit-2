@@ -73,12 +73,3 @@ string answerTaskFour = TaskSolver.SolveTaskFour(task4.parameters);
 // Sending the answer to the server
 Response task4AnswerResponse = await httpUtils.Post(Constants.baseURL + Constants.taskEndpoint + Constants.myPersonalID + "/" + taskID, answerTaskFour);
 Functions.WriteAnswerMessage(task4AnswerResponse);
-
-public class Task
-{
-    public string? title { get; set; }
-    public string? description { get; set; }
-    public string? taskID { get; set; }
-    public string? usierID { get; set; }
-    public string? parameters { get; set; }
-}
