@@ -1,4 +1,5 @@
 using AnsiTools;
+using System.Text.Json;
 using Colors = AnsiTools.ANSICodes.Colors;
 using HTTPUtils;
 public class Testing
@@ -64,17 +65,12 @@ public class Functions
 
     public static void WriteAnswerMessage(Response taskAnswerResponse)
     {
-        if (taskAnswerResponse.statusCode == 200)
-        {
-            Console.WriteLine($"Answer: {Colors.Green}{"Correct"}{ANSICodes.Reset}");
-        }
-        else
-        {
-            Console.WriteLine($"Answer: {Colors.Red}{"Incorrect"}{ANSICodes.Reset}");
-        }
+        Console.WriteLine($"Answer: {Colors.Green}{taskAnswerResponse}{ANSICodes.Reset}");
     }
-    public static void WriteTaskMessage(Task? CurrentTask)
+    public static Task GetTask(Response taskResponse)
     {
+        Task CurrentTask = JsonSerializer.Deserialize<Task>(taskResponse.content);
         Console.WriteLine($"TASK: {ANSICodes.Effects.Bold}{ANSICodes.Effects.Underline}{CurrentTask?.title}{ANSICodes.Reset}\nDescription: {Colors.Cyan}{CurrentTask?.description}{ANSICodes.Reset}\nParameters: {Colors.Yellow}{CurrentTask?.parameters}{ANSICodes.Reset}");
+        return CurrentTask;
     }
 }

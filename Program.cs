@@ -21,37 +21,30 @@ HttpUtils httpUtils = HttpUtils.instance;
 // We start by registering and getting the first task
 Response startRespons = await httpUtils.Get(baseURL + startEndpoint + myPersonalID);
 Console.WriteLine($"Start:\n{Colors.Magenta}{startRespons}{ANSICodes.Reset}\n\n"); // Print the response from the server to the console
-string taskID = "rEu25ZX"; // We get the taskID from the previous response and use it to get the task (look at the console output to find the taskID)
+string taskID = ""; // We get the taskID from the previous response and use it to get the task (look at the console output to find the taskID)
+
 
 
 //#### FIRST TASK 
 // Fetch the details of the task from the server.
+taskID = "rEu25ZX";
 Response task1Response = await httpUtils.Get(baseURL + taskEndpoint + myPersonalID + "/" + taskID); // Get the task from the server
-Task task1 = JsonSerializer.Deserialize<Task>(task1Response.content);
-Functions.WriteTaskMessage(task1);
+Task task1 = Functions.GetTask(task1Response);
 
+//Solution to the first task
 string romanNumeral = task1.parameters.Split(" ")[0];
-Dictionary<char, int> romanValues = new Dictionary<char, int>
-{
-    {'I', 1},
-    {'V', 5},
-    {'X', 10},
-    {'L', 50},
-    {'C', 100},
-};
 int answerTaskOne = Functions.RomanToInteger(romanNumeral);
 
 // Send the answer to the server
 Response task1AnswerResponse = await httpUtils.Post(baseURL + taskEndpoint + myPersonalID + "/" + taskID, answerTaskOne.ToString());
 Functions.WriteAnswerMessage(task1AnswerResponse);
 
+
+
 //#### SECOND TASK 
-// Fetch the details of the task from the server.
 taskID = "otYK2";
 Response task2Response = await httpUtils.Get(baseURL + taskEndpoint + myPersonalID + "/" + taskID); // Get the task from the server
-Task task2 = JsonSerializer.Deserialize<Task>(task2Response.content);
-Functions.WriteTaskMessage(task2);
-
+Task task2 = Functions.GetTask(task2Response);
 
 //Solution to the second task
 string[] words = task2.parameters.Split(",");
@@ -63,12 +56,12 @@ string answerTaskTwo = string.Join(",", uniqueWords);
 Response task2AnswerResponse = await httpUtils.Post(baseURL + taskEndpoint + myPersonalID + "/" + taskID, answerTaskTwo);
 Functions.WriteAnswerMessage(task2AnswerResponse);
 
+
+
 //#### THIRD TASK 
-// Fetch the details of the task from the server.
 taskID = "psu31_4";
 Response task3Response = await httpUtils.Get(baseURL + taskEndpoint + myPersonalID + "/" + taskID); // Get the task from the server
-Task task3 = JsonSerializer.Deserialize<Task>(task3Response.content);
-Functions.WriteTaskMessage(task3);
+Task task3 = Functions.GetTask(task3Response);
 
 //Solution to the third task
 string[] numbers = task3.parameters.Split(",");
@@ -77,19 +70,18 @@ for (int i = 0; i < numbers.Length; i++)
 {
     intNumbers[i] = int.Parse(numbers[i]);
 }
-int answerTaskThree = intNumbers.Sum();
+int answerTaskThree = intNumbers.Max();
 
 // Send the answer to the server
 Response task3AnswerResponse = await httpUtils.Post(baseURL + taskEndpoint + myPersonalID + "/" + taskID, answerTaskThree.ToString());
 Functions.WriteAnswerMessage(task3AnswerResponse);
 
+
+
 //#### FOURTH TASK
-// Fetch the details of the task from the server.
 taskID = "kuTw53L";
 Response task4Response = await httpUtils.Get(baseURL + taskEndpoint + myPersonalID + "/" + taskID); // Get the task from the server
-Task task4 = JsonSerializer.Deserialize<Task>(task4Response.content);
-Functions.WriteTaskMessage(task4);
-
+Task task4 = Functions.GetTask(task4Response);
 
 //Solution to the fourth task
 string[] numbersArray = task4.parameters.Split(",");
@@ -99,7 +91,6 @@ for (int i = 0; i < numbersArray.Length; i++)
 {
     intNumbersArray[i] = int.Parse(numbersArray[i]);
 }
-
 Array.Sort(intNumbersArray);
 foreach (int number in intNumbersArray)
 {
@@ -113,6 +104,7 @@ string answerTaskFour = string.Join(",", primeNumbers);
 // Send the answer to the server
 Response task4AnswerResponse = await httpUtils.Post(baseURL + taskEndpoint + myPersonalID + "/" + taskID, answerTaskFour);
 Functions.WriteAnswerMessage(task4AnswerResponse);
+
 
 
 
