@@ -29,76 +29,28 @@ Console.WriteLine($"TASK: {ANSICodes.Effects.Bold}{task1?.title}{ANSICodes.Reset
 
 //Solution to the first task
 string romanNumeral = task1.parameters.Split(" ")[0];
+
+Dictionary<char, int> romanValues = new Dictionary<char, int>
+{
+    {'I', 1},
+    {'V', 5},
+    {'X', 10},
+    {'L', 50},
+    {'C', 100},
+};
+
 int RomanToInteger(string input)
 {
     int result = 0;
     for (int i = 0; i < input.Length; i++)
     {
-        if (input.Length - i >= 2)
+        if (i + 1 < input.Length && romanValues[input[i]] < romanValues[input[i + 1]])
         {
-            if (input[i] == 'X' && input[i + 1] == 'C')
-            {
-                result += 90;
-                i++;
-            }
-            else if (input[i] == 'X' && input[i + 1] == 'L')
-            {
-                result += 40;
-                i++;
-            }
-            else if (input[i] == 'I' && input[i + 1] == 'V')
-            {
-                result += 4;
-                i++;
-            }
-            else if (input[i] == 'I' && input[i + 1] == 'X')
-            {
-                result += 9;
-                i++;
-            }
-            else if (input[i] == 'C')
-            {
-                result += 100;
-            }
-            else if (input[i] == 'L')
-            {
-                result += 50;
-            }
-            else if (input[i] == 'X')
-            {
-                result += 10;
-            }
-            else if (input[i] == 'V')
-            {
-                result += 5;
-            }
-            else if (input[i] == 'I')
-            {
-                result += 1;
-            }
+            result -= romanValues[input[i]];
         }
         else
         {
-            if (input[i] == 'C')
-            {
-                result += 100;
-            }
-            else if (input[i] == 'L')
-            {
-                result += 50;
-            }
-            else if (input[i] == 'X')
-            {
-                result += 10;
-            }
-            else if (input[i] == 'V')
-            {
-                result += 5;
-            }
-            else if (input[i] == 'I')
-            {
-                result += 1;
-            }
+            result += romanValues[input[i]];
         }
     }
     return result;
