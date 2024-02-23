@@ -158,11 +158,12 @@ Console.WriteLine($"TASK: {ANSICodes.Effects.Bold}{task4?.title}{ANSICodes.Reset
 
 
 //Solution to the fourth task
-string[] numbersPrime = task4.parameters.Split(",");
-int[] intNumbersPrime = new int[numbersPrime.Length];
-for (int i = 0; i < numbersPrime.Length; i++)
+string[] numbersArray = task4.parameters.Split(",");
+int[] intNumbersArray = new int[numbersArray.Length];
+List<int> primeNumbers = new List<int>();
+for (int i = 0; i < numbersArray.Length; i++)
 {
-    intNumbersPrime[i] = int.Parse(numbersPrime[i]);
+    intNumbersArray[i] = int.Parse(numbersArray[i]);
 }
 bool IsNumberPrime(int number)
 {
@@ -179,6 +180,20 @@ bool IsNumberPrime(int number)
     }
     return true;
 }
+Array.Sort(intNumbersArray);
+foreach (int number in intNumbersArray)
+{
+    if (IsNumberPrime(number))
+    {
+        primeNumbers.Add(number);
+    }
+}
+string answer4 = string.Join(",", primeNumbers);
+
+// Send the answer to the server
+Response task4AnswerResponse = await httpUtils.Post(baseURL + taskEndpoint + myPersonalID + "/" + taskID, answer4);
+Console.WriteLine($"Answer: {Colors.Green}{task4AnswerResponse}{ANSICodes.Reset}");
+
 
 
 
