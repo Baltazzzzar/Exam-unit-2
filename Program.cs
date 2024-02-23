@@ -30,8 +30,7 @@ Response task1Response = await httpUtils.Get(baseURL + taskEndpoint + myPersonal
 Task task1 = Functions.GetTask(task1Response);
 
 //Solution
-string romanNumeral = task1.parameters.Split(" ")[0];
-int answerTaskOne = Functions.RomanToInteger(romanNumeral);
+int answerTaskOne = TaskSolver.SolveTaskOne(task1.parameters);
 
 // Sending the answer to the server
 Response task1AnswerResponse = await httpUtils.Post(baseURL + taskEndpoint + myPersonalID + "/" + taskID, answerTaskOne.ToString());
@@ -46,10 +45,7 @@ Response task2Response = await httpUtils.Get(baseURL + taskEndpoint + myPersonal
 Task task2 = Functions.GetTask(task2Response);
 
 //Solution
-string[] words = task2.parameters.Split(",");
-string[] uniqueWords = words.Distinct().ToArray();
-Array.Sort(uniqueWords);
-string answerTaskTwo = string.Join(",", uniqueWords);
+string answerTaskTwo = TaskSolver.SolveTaskTwo(task2.parameters);
 
 // Sending the answer to the server
 Response task2AnswerResponse = await httpUtils.Post(baseURL + taskEndpoint + myPersonalID + "/" + taskID, answerTaskTwo);
@@ -64,13 +60,7 @@ Response task3Response = await httpUtils.Get(baseURL + taskEndpoint + myPersonal
 Task task3 = Functions.GetTask(task3Response);
 
 //Solution
-string[] numbers = task3.parameters.Split(",");
-int[] intNumbers = new int[numbers.Length];
-for (int i = 0; i < numbers.Length; i++)
-{
-    intNumbers[i] = int.Parse(numbers[i]);
-}
-int answerTaskThree = intNumbers.Sum();
+int answerTaskThree = TaskSolver.SolveTaskThree(task3.parameters);
 
 // Sending the answer to the server
 Response task3AnswerResponse = await httpUtils.Post(baseURL + taskEndpoint + myPersonalID + "/" + taskID, answerTaskThree.ToString());
@@ -85,22 +75,7 @@ Response task4Response = await httpUtils.Get(baseURL + taskEndpoint + myPersonal
 Task task4 = Functions.GetTask(task4Response);
 
 //Solution
-string[] numbersArray = task4.parameters.Split(",");
-int[] intNumbersArray = new int[numbersArray.Length];
-List<int> primeNumbers = new List<int>();
-for (int i = 0; i < numbersArray.Length; i++)
-{
-    intNumbersArray[i] = int.Parse(numbersArray[i]);
-}
-Array.Sort(intNumbersArray);
-foreach (int number in intNumbersArray)
-{
-    if (Functions.IsNumberPrime(number))
-    {
-        primeNumbers.Add(number);
-    }
-}
-string answerTaskFour = string.Join(",", primeNumbers);
+string answerTaskFour = TaskSolver.SolveTaskFour(task4.parameters);
 
 // Sending the answer to the server
 Response task4AnswerResponse = await httpUtils.Post(baseURL + taskEndpoint + myPersonalID + "/" + taskID, answerTaskFour);

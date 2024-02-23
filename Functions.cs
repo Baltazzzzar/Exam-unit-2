@@ -2,6 +2,7 @@ using AnsiTools;
 using System.Text.Json;
 using Colors = AnsiTools.ANSICodes.Colors;
 using HTTPUtils;
+using System.Runtime.CompilerServices;
 public class Testing
 {
     public static void Test<T>(T expected, T actual, string description = "Test")
