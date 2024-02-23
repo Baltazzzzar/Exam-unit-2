@@ -6,7 +6,7 @@ using System.Text;
 
 namespace HTTPUtils
 {
-    class Response
+    public class Response
     {
         public string? content { get; set; }
         public int statusCode { get; set; }

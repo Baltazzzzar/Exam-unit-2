@@ -27,10 +27,10 @@ string taskID = "rEu25ZX"; // We get the taskID from the previous response and u
 //#### FIRST TASK 
 // Fetch the details of the task from the server.
 Response task1Response = await httpUtils.Get(baseURL + taskEndpoint + myPersonalID + "/" + taskID); // Get the task from the server
-Task CurrentTask = JsonSerializer.Deserialize<Task>(task1Response.content);
-Console.WriteLine($"TASK: {ANSICodes.Effects.Bold}{CurrentTask?.title}{ANSICodes.Reset}\n{CurrentTask?.description}\nParameters: {Colors.Yellow}{CurrentTask?.parameters}{ANSICodes.Reset}");
+Task task1 = JsonSerializer.Deserialize<Task>(task1Response.content);
+Functions.WriteTaskMessage(task1);
 
-string romanNumeral = CurrentTask.parameters.Split(" ")[0];
+string romanNumeral = task1.parameters.Split(" ")[0];
 Dictionary<char, int> romanValues = new Dictionary<char, int>
 {
     {'I', 1},
@@ -39,18 +39,18 @@ Dictionary<char, int> romanValues = new Dictionary<char, int>
     {'L', 50},
     {'C', 100},
 };
-int answerTaskOne = RomanToInteger(romanNumeral);
+int answerTaskOne = Functions.RomanToInteger(romanNumeral);
 
 // Send the answer to the server
 Response task1AnswerResponse = await httpUtils.Post(baseURL + taskEndpoint + myPersonalID + "/" + taskID, answerTaskOne.ToString());
-WriteAnswerMessage(task1AnswerResponse);
+Functions.WriteAnswerMessage(task1AnswerResponse);
 
 //#### SECOND TASK 
 // Fetch the details of the task from the server.
 taskID = "otYK2";
 Response task2Response = await httpUtils.Get(baseURL + taskEndpoint + myPersonalID + "/" + taskID); // Get the task from the server
 Task task2 = JsonSerializer.Deserialize<Task>(task2Response.content);
-Console.WriteLine($"TASK: {ANSICodes.Effects.Bold}{task2?.title}{ANSICodes.Reset}\n{task2?.description}\nParameters: {Colors.Yellow}{task2?.parameters}{ANSICodes.Reset}");
+Functions.WriteTaskMessage(task2);
 
 
 //Solution to the second task
@@ -61,14 +61,14 @@ string answerTaskTwo = string.Join(",", uniqueWords);
 
 // Send the answer to the server
 Response task2AnswerResponse = await httpUtils.Post(baseURL + taskEndpoint + myPersonalID + "/" + taskID, answerTaskTwo);
-WriteAnswerMessage(task2AnswerResponse);
+Functions.WriteAnswerMessage(task2AnswerResponse);
 
 //#### THIRD TASK 
 // Fetch the details of the task from the server.
 taskID = "psu31_4";
 Response task3Response = await httpUtils.Get(baseURL + taskEndpoint + myPersonalID + "/" + taskID); // Get the task from the server
 Task task3 = JsonSerializer.Deserialize<Task>(task3Response.content);
-Console.WriteLine($"TASK: {ANSICodes.Effects.Bold}{task3?.title}{ANSICodes.Reset}\n{task3?.description}\nParameters: {Colors.Yellow}{task3?.parameters}{ANSICodes.Reset}");
+Functions.WriteTaskMessage(task3);
 
 //Solution to the third task
 string[] numbers = task3.parameters.Split(",");
@@ -81,13 +81,14 @@ int answerTaskThree = intNumbers.Sum();
 
 // Send the answer to the server
 Response task3AnswerResponse = await httpUtils.Post(baseURL + taskEndpoint + myPersonalID + "/" + taskID, answerTaskThree.ToString());
-WriteAnswerMessage(task3AnswerResponse);
+Functions.WriteAnswerMessage(task3AnswerResponse);
+
 //#### FOURTH TASK
 // Fetch the details of the task from the server.
 taskID = "kuTw53L";
 Response task4Response = await httpUtils.Get(baseURL + taskEndpoint + myPersonalID + "/" + taskID); // Get the task from the server
 Task task4 = JsonSerializer.Deserialize<Task>(task4Response.content);
-Console.WriteLine($"TASK: {ANSICodes.Effects.Bold}{task4?.title}{ANSICodes.Reset}\n{task4?.description}\nParameters: {Colors.Yellow}{task4?.parameters}{ANSICodes.Reset}");
+Functions.WriteTaskMessage(task4);
 
 
 //Solution to the fourth task
@@ -102,7 +103,7 @@ for (int i = 0; i < numbersArray.Length; i++)
 Array.Sort(intNumbersArray);
 foreach (int number in intNumbersArray)
 {
-    if (IsNumberPrime(number))
+    if (Functions.IsNumberPrime(number))
     {
         primeNumbers.Add(number);
     }
@@ -111,82 +112,24 @@ string answerTaskFour = string.Join(",", primeNumbers);
 
 // Send the answer to the server
 Response task4AnswerResponse = await httpUtils.Post(baseURL + taskEndpoint + myPersonalID + "/" + taskID, answerTaskFour);
-WriteAnswerMessage(task4AnswerResponse);
+Functions.WriteAnswerMessage(task4AnswerResponse);
 
-//###Functions
-int RomanToInteger(string input)
-{
-    int result = 0;
-    for (int i = 0; i < input.Length; i++)
-    {
-        if (i + 1 < input.Length && romanValues[input[i]] < romanValues[input[i + 1]])
-        {
-            result -= romanValues[input[i]];
-        }
-        else
-        {
-            result += romanValues[input[i]];
-        }
-    }
-    return result;
-}
 
-bool IsNumberPrime(int number)
-{
-    if (number <= 1)
-    {
-        return false;
-    }
-    for (int i = 2; i < number; i++)
-    {
-        if (number % i == 0)
-        {
-            return false;
-        }
-    }
-    return true;
-}
-
-void WriteAnswerMessage(Response taskAnswerResponse)
-{
-    if (taskAnswerResponse.statusCode == 200)
-    {
-        Console.WriteLine($"Answer: {Colors.Green}{"Correct"}{ANSICodes.Reset}");
-    }
-    else
-    {
-        Console.WriteLine($"Answer: {Colors.Red}{"Incorrect"}{ANSICodes.Reset}");
-    }
-}
 
 //###Testing
-//Testing function
-static void Test<T>(T expected, T actual, string description = "Test")
-{
-    if (expected.Equals(actual))
-    {
-        Console.WriteLine($"{Colors.Green} --PASSED--{description}.{Colors.Yellow}Expected: {expected}, Actual: {actual}{ANSICodes.Reset}");
-    }
-    else
-    {
-        Console.WriteLine($"{Colors.Red} --FAILED-- {description}.{Colors.Yellow} Expected: {expected}, {Colors.Red}Actual: {actual}{ANSICodes.Reset}");
-    }
-}
-//Testing the tasks
-Test(RomanToInteger("IV"), 4, " IV ");
-Test(RomanToInteger("XLIX"), 49, "XLIX");
-Test(RomanToInteger("XCIX"), 99, "XCIX");
-Test(IsNumberPrime(2), true, "2 is prime");
-Test(IsNumberPrime(4), false, "4 is not prime");
-Test(IsNumberPrime(5), true, "5 is prime");
-Test(IsNumberPrime(7), true, "7 is prime");
-Test(IsNumberPrime(9), false, "9 is not prime");
-Test(IsNumberPrime(11), true, "11 is prime");
+Console.WriteLine($"{Colors.Magenta}Testing the functions{ANSICodes.Reset}");
+Testing.Test(Functions.RomanToInteger("IV"), 4, " IV ");
+Testing.Test(Functions.RomanToInteger("XLIX"), 49, "XLIX");
+Testing.Test(Functions.RomanToInteger("XCIX"), 99, "XCIX");
+Testing.Test(Functions.IsNumberPrime(2), true, "2 is prime");
+Testing.Test(Functions.IsNumberPrime(4), false, "4 is not prime");
+Testing.Test(Functions.IsNumberPrime(5), true, "5 is prime");
+Testing.Test(Functions.IsNumberPrime(7), true, "7 is prime");
+Testing.Test(Functions.IsNumberPrime(9), false, "9 is not prime");
+Testing.Test(Functions.IsNumberPrime(11), true, "11 is prime");
 
 
-
-
-class Task
+public class Task
 {
     public string? title { get; set; }
     public string? description { get; set; }
